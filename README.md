@@ -59,6 +59,4 @@ npm start
 ```
 *(The application will automatically open in your browser at `http://localhost:3000`)*
 
-
-temp line
-https://code-with-me.global.jetbrains.com/PkCINVrplT1e8lTELNQs5w
+</3
