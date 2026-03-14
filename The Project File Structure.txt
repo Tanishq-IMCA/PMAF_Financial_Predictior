@@ -1,0 +1,32 @@
+PMAF_Financial_Predictor/
+│
+├── backend/                        # Python / ML Brains 🧠
+│   ├── data/
+│   │   ├── training_data.csv       # The 1500-row realistic training set
+│   │   └── user_history.csv        # The actual data we feed the dashboard
+│   │
+│   ├── models/
+│   │   └── random_forest_model.pkl # The saved, trained model
+│   │
+│   ├── scripts/
+│   │   ├── data_generator.py       # Module 1: Generates the chaotic, realistic CSVs
+│   │   └── train_model.py          # Module 2: Trains the Random Forest
+│   │
+│   ├── app.py                      # Module 3: Flask/FastAPI server to send data to React
+│   └── requirements.txt            # Python dependencies (pandas, scikit-learn, etc.)
+│
+├── frontend/                       # React / Glassmorphism UI ✨
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Dashboard.jsx       # Main layout
+│   │   │   ├── FancyChart.jsx      # The graph with dotted lines and red danger zones
+│   │   │   └── PredictionsPanel.jsx# Text-based prediction readouts
+│   │   ├── App.jsx
+│   │   ├── index.css               # Glassmorphism & soft-edge styling
+│   │   └── utils/
+│   │       └── api.js              # Fetches data from the Python backend
+│   │
+│   └── package.json                # Node dependencies (React, Chart.js, etc.)
+│
+└── PMAF_Project_Specification.txt  # The blueprint (see below)

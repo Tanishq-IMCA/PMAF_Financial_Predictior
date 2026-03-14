@@ -1,0 +1,42 @@
+================================================================================
+PMAF PROJECT SPECIFICATION: Predictive Financial Dashboard
+================================================================================
+
+1. CORE OBJECTIVE
+To build a machine learning-powered financial dashboard featuring realistic data generation, predictive forecasting using a Random Forest algorithm, and a modern "glassmorphism" UI.
+
+2. MODULE 1: REALISTIC DATA GENERATION (The CSV Maker)
+The generator must mimic actual human financial behavior. It will output two files:
+- `training_data.csv` (approx. 1500 rows for model training).
+- `user_history.csv` (for dashboard display and live predictions).
+
+Data Rules & Realism Engine:
+- Multi-Transaction Days: A single date can have multiple entries (e.g., 01-12-2025: $40 Transport, 01-12-2025: $150 Groceries).
+- Skipped Days: Days with 0 transactions will naturally occur (staying at home).
+- Baseline vs. Spikes: Includes fixed recurring costs (Rent, Utilities) mixed with erratic variable costs (Entertainment, Dining).
+- Seasonality: Injects seasonal spending spikes (e.g., higher shopping/travel expenses in November/December for holidays, sudden medical anomalies, or vacation months).
+- Categories: Housing, Transportation, Groceries, Utilities, Healthcare, Insurance, Personal/Entertainment.
+
+3. MODULE 2: MODEL TRAINING (Random Forest)
+- The model will be trained on `training_data.csv`.
+- It will learn patterns regarding how account balances deplete based on time of month, seasonality, and category frequency.
+
+4. MODULE 3: PREDICTIONS & ANALYTICS (The Output)
+The system will analyze the `user_history.csv` and predict the following data points:
+- The "Day of Reckoning": The exact predicted date the account balance will hit $0 (or a defined critical low) at the current spending velocity.
+- Month-over-Month Comparison: Is the user trending higher or lower in spending compared to previous historical months?
+- Category Forecasting: "You are projected to overspend on Transportation by 20% this month."
+- Seasonal Warnings: "Based on last year, expect a 30% spike in expenses next month due to holiday seasonality."
+
+5. VISUALIZATION & DASHBOARD UI (Frontend)
+Design System: Glassmorphism (frosted glass panels, semi-transparent backgrounds, modern minimalist typography). Edges should have a medium border-radius (not sharp, not fully pill-shaped).
+
+The Main Chart Rules:
+- X-Axis: Time (Months/Days).
+- Y-Axis: Account Balance / Spending Volume.
+- Historical Data: Displayed as a solid, crisp line.
+- Predictive Data: Displayed as a continuous dotted line extending into the future.
+- The "Danger Zone" Gradient: The predictive dotted line must dynamically change color. It starts as a standard color (e.g., white or green) and slowly transitions into a glowing RED as the projected balance drops into the "Low Balance / Danger Zone".
+- Zoom Functionality: Users can zoom out to view macro trends (identifying those busy vs. quiet months visually).
+
+================================================================================
