@@ -30,4 +30,5 @@ const PredictionsPanel = ({ data }) => {
   );
 };
 
+
 export default PredictionsPanel;
