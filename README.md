@@ -83,22 +83,26 @@ The Axiom dashboard provides a comprehensive and interactive overview of your fi
 
 ---
 
-## Future Enhancements (TODO List)
+## Project Roadmap
 
-This project is continuously evolving. Here are the planned next steps:
+This project is continuously evolving. Here is the current status and planned next steps:
 
 ### Backend Enhancements
--   **Multiple Model Training**: Implement and train additional machine learning models (e.g., Linear Regression, Gradient Boosting) in `backend/scripts/train_model.py` alongside the existing Random Forest.
--   **Model Performance Comparison**: Calculate and compare Root Mean Squared Error (RMSE) and R-squared (R²) for all trained models to identify the "best" performing model.
--   **Dynamic Model Selection**: Automatically select the best-performing model for generating predictions on the dashboard.
--   **New API Endpoint**: Create a new API endpoint (`/api/model_performance`) in `backend/app.py` to expose model comparison metrics to the frontend.
+- [ ] Implement and train additional machine learning models (e.g., Linear Regression, Gradient Boosting) in `backend/scripts/train_model.py`.
+- [ ] Calculate and compare Root Mean Squared Error (RMSE) and R-squared (R²) for all trained models.
+- [ ] Dynamically select the best-performing model for generating dashboard predictions.
+- [ ] Create a new API endpoint (`/api/model_performance`) in `backend/app.py` to expose model comparison metrics.
 
 ### Frontend Enhancements
--   **Model Performance Panel**: Develop a new React component (`ModelPerformancePanel.jsx`) to display a clean, interactive table of all trained models' performance metrics (RMSE, R²), highlighting the best model.
--   **Spending Breakdown Donut Chart**: Create a `SpendingBreakdown.jsx` component featuring an interactive donut chart to visualize spending percentages per category. Hovering over a segment will reveal detailed amounts.
--   **Top Category Comparison Chart**: Implement a smaller multi-line chart within `SpendingBreakdown.jsx` to compare spending trends between the top two expense categories over a recent period.
--   **Daily Spend Bar Chart**: Integrate a concise bar chart into `MetricsPanel.jsx` to show "Yesterday's Spend," "Today's Spend," and "Tomorrow's Predicted Spend" for quick daily context.
--   **Integrate New Components**: Seamlessly integrate all new panels and charts into the `Dashboard.jsx` layout, maintaining the glassmorphism design.
+- [x] **Multi-Page Structure & Navigation**: Implemented `react-router-dom` for multi-page navigation with a floating, icon-only capsule navigation bar.
+- [x] **Custom Font Integration**: Applied `Bourgeois-Book.otf` globally across the application.
+- [x] **Professional Terminology**: Changed "Day of Reckoning" to "Zero Balance Date".
+- [x] **Project Name Update**: Changed the project name to "The Axiom".
+- [ ] Develop a new React component (`ModelPerformancePanel.jsx`) to display a clean, interactive table of all trained models' performance metrics (RMSE, R²), highlighting the best model.
+- [ ] Create a `SpendingBreakdown.jsx` component featuring an interactive donut chart to visualize spending percentages per category.
+- [ ] Implement a smaller multi-line chart within `SpendingBreakdown.jsx` to compare spending trends between the top two expense categories.
+- [ ] Integrate a concise bar chart into `MetricsPanel.jsx` to show "Yesterday's Spend," "Today's Spend," and "Tomorrow's Predicted Spend".
+- [ ] Seamlessly integrate all new panels and charts into the `Dashboard.jsx` layout.
 
 ---
 
