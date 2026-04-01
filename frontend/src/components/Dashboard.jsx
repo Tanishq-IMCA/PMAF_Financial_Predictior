@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import FancyChart from './FancyChart';
 import PredictionsPanel from './PredictionsPanel';
+import Header from './Header'; // Import the new Header component
+import MetricsPanel from './MetricsPanel'; // Import the new MetricsPanel component
 import { fetchHistoricalData, fetchPredictions } from '../utils/api';
 
 const Dashboard = () => {
@@ -30,14 +32,20 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1 style={{padding: '32px 32px 0 32px'}}>PMAF Financial Predictor</h1>
+      <Header /> {/* Place the Header at the top */}
       <div className="dashboard-container">
         <div className="glass-panel chart-container">
           <h2>Balance Forecast</h2>
           <FancyChart historical={historicalData} predictions={predictionData?.predictions || []} />
         </div>
         
-        <div className="glass-panel">
+        {/* New Metrics Panel */}
+        <div className="metrics-grid"> {/* This will be a grid for metrics */}
+          <MetricsPanel historical={historicalData} predictions={predictionData} />
+        </div>
+
+        {/* Existing Predictions Panel */}
+        <div className="glass-panel predictions-panel">
           <PredictionsPanel data={predictionData} />
         </div>
       </div>

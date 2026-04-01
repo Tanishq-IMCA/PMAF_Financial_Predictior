@@ -1,7 +1,13 @@
 /* PMAF Financial Predictor: Main Stylesheet */
 /* Adapted from IMCA Nexus reference project */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+/* Define custom font */
+@font-face {
+    font-family: 'Bourgeois Book';
+    src: url('./media/font/Bourgeois-Book.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
 
 :root {
     --glass-bg-primary: rgba(20, 20, 20, 0.65);
@@ -13,9 +19,12 @@
 }
 
 body {
-    background: linear-gradient(135deg, #1e1e2f 0%, #151520 100%);
+    background-image: url('./media/wallpaper/wallpaper.jpg'); /* Corrected wallpaper path */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Keeps wallpaper fixed when scrolling */
     color: white;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Bourgeois Book', sans-serif; /* Apply custom font */
     min-height: 100vh;
     margin: 0;
     overflow-x: hidden;
@@ -41,7 +50,7 @@ h1, h2, h3 {
 @media (min-width: 1024px) {
     .dashboard-container {
         grid-template-columns: 3fr 1fr; /* Main content on left, smaller panel on right */
-        grid-template-rows: auto 1fr;
+        grid-template-rows: auto auto; /* Two rows for the right column */
     }
 }
 
@@ -80,8 +89,13 @@ h1, h2, h3 {
 }
 
 .predictions-panel {
-    grid-column: 1 / -1;
+    grid-column: 1 / -1; /* Span full width on mobile */
 }
+
+.metrics-grid {
+    grid-column: 1 / -1; /* Span full width on mobile */
+}
+
 
 @media (min-width: 1024px) {
     .chart-container {
@@ -90,9 +104,12 @@ h1, h2, h3 {
     }
     .predictions-panel {
         grid-column: 2 / 3;
-        grid-row: 1 / 2; /* First panel on the right */
+        grid-row: 1 / 2; /* First panel on the right (top) */
     }
-    /* Add more panels here if needed */
+    .metrics-grid {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3; /* Second panel on the right (bottom) */
+    }
 }
 
 /* --- Utility & Text Styles --- */
