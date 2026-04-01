@@ -50,17 +50,17 @@ The Axiom is a sophisticated financial prediction software designed to provide u
 ## Features
 
 ### Dashboard
--   **Interactive Balance Forecast**: A line graph showing historical and predicted balance with weekly/monthly filters.
+-   **Interactive Balance Forecast**: A sleek, gradient-filled line graph showing historical and predicted balance.
 -   **"Danger Zone" Transition**: The predictive line dynamically changes color to red as the projected balance approaches zero.
 -   **Metrics Panel**: Displays current balance, projected zero balance date, monthly spend, and average transaction amount.
 -   **AI Insights & Predictions**: Text-based warnings and AI-driven insights into spending behavior.
 -   **Model Performance**: A comparison table of different ML models (RMSE, R²).
 
 ### Reports Page
--   **Spending Breakdown**: A detailed analysis of spending habits.
--   **Donut Chart**: Visualizes spending percentages by category.
+-   **Spending Analysis**: A dedicated page for detailed spending analysis with multiple, sleek charts.
+-   **Donut Chart**: Visualizes spending percentages by category with a modern color palette.
+-   **Radar Chart**: A "spending shape" chart to visualize the distribution of spending across all categories.
 -   **Top 2 Category Comparison**: A multi-line chart comparing spending trends of the top two expense categories over time.
--   **Time-based Filtering**: Both the Dashboard and Reports pages feature weekly and monthly data filters.
 
 ---
 
@@ -72,8 +72,7 @@ The Axiom is a sophisticated financial prediction software designed to provide u
 - [x] **Dynamic Model Selection**: Automatically uses the best-performing model for predictions.
 - [x] **Multi-Page Frontend**: React application with a floating navigation bar.
 - [x] **Dashboard Layout**: A refined, responsive layout for all primary data panels.
-- [x] **Spending Breakdown Reports**: A dedicated page for detailed spending analysis with multiple charts.
-- [x] **Time-based Filtering**: Implemented weekly and monthly filters for all relevant charts.
+- [x] **Advanced Charting**: A full suite of sleek, custom-styled charts on the Dashboard and Reports pages.
 
 ### Future Enhancements
 - [ ] Integrate a concise bar chart into `MetricsPanel.jsx` to show "Yesterday's Spend," "Today's Spend," and "Tomorrow's Predicted Spend".
@@ -100,6 +99,7 @@ py app.py
 ### 2. Frontend Setup
 ```bash
 cd frontend
+npm install chartjs-adapter-date-fns date-fns
 npm install
 npm start
 ```

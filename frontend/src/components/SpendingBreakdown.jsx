@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Doughnut, Line } from 'react-chartjs-2';
+import { Doughnut, Line, Radar } from 'react-chartjs-2';
 import { fetchHistoricalData } from '../utils/api';
 import {
   Chart as ChartJS,
@@ -10,7 +10,9 @@ import {
   TimeScale,
   Tooltip,
   Legend,
-  CategoryScale
+  CategoryScale,
+  RadialLinearScale,
+  Filler
 } from 'chart.js';
 
 // Register the necessary components for Chart.js
@@ -21,6 +23,8 @@ ChartJS.register(
   LinearScale,
   TimeScale,
   CategoryScale,
+  RadialLinearScale,
+  Filler,
   Tooltip,
   Legend
 );
@@ -28,89 +32,95 @@ ChartJS.register(
 const SpendingBreakdown = () => {
   const [doughnutData, setDoughnutData] = useState(null);
   const [lineData, setLineData] = useState(null);
+  const [radarData, setRadarData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [timeRange, setTimeRange] = useState('all'); // 'weekly', 'monthly', 'all'
-
-  const filterDataByRange = (data, range) => {
-    if (range === 'all') return data;
-    const now = new Date();
-    const rangeStart = new Date();
-    if (range === 'weekly') {
-      rangeStart.setDate(now.getDate() - 7);
-    } else if (range === 'monthly') {
-      rangeStart.setMonth(now.getMonth() - 1);
-    }
-    return data.filter(d => new Date(d.Date) >= rangeStart);
-  };
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const processData = async () => {
       setLoading(true);
       const historicalData = await fetchHistoricalData();
-      const filteredData = filterDataByRange(historicalData, timeRange);
 
-      if (filteredData.length === 0) {
-        setDoughnutData(null);
-        setLineData(null);
+      if (historicalData.length === 0) {
         setLoading(false);
         return;
       }
 
-      // --- Doughnut Chart Data ---
       const spending = {};
-      filteredData.forEach(item => {
+      historicalData.forEach(item => {
         if (item.Amount < 0) {
           const category = item.Category;
           spending[category] = (spending[category] || 0) + Math.abs(item.Amount);
         }
       });
 
+      const labels = Object.keys(spending);
+      const data = Object.values(spending);
+      const colors = ['#8A2BE2', '#00BFFF', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
+
       setDoughnutData({
-        labels: Object.keys(spending),
-        datasets: [{
-          data: Object.values(spending),
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF'],
-        }]
+        labels,
+        datasets: [{ data, backgroundColor: colors }]
       });
 
-      // --- Line Chart Data (Top 2 Categories) ---
       const topTwoCategories = Object.entries(spending).sort((a, b) => b[1] - a[1]).slice(0, 2).map(item => item[0]);
-      
-      const category1Data = filteredData.filter(item => item.Category === topTwoCategories[0] && item.Amount < 0).map(item => ({ x: item.Date, y: Math.abs(item.Amount) }));
-      const category2Data = filteredData.filter(item => item.Category === topTwoCategories[1] && item.Amount < 0).map(item => ({ x: item.Date, y: Math.abs(item.Amount) }));
+      const category1Data = historicalData.filter(item => item.Category === topTwoCategories[0] && item.Amount < 0).map(item => ({ x: item.Date, y: Math.abs(item.Amount) }));
+      const category2Data = historicalData.filter(item => item.Category === topTwoCategories[1] && item.Amount < 0).map(item => ({ x: item.Date, y: Math.abs(item.Amount) }));
 
       setLineData({
         datasets: [
-          { label: topTwoCategories[0], data: category1Data, borderColor: '#FF6384', fill: false },
-          { label: topTwoCategories[1], data: category2Data, borderColor: '#36A2EB', fill: false }
+          { label: topTwoCategories[0], data: category1Data, borderColor: '#8A2BE2', tension: 0.4, fill: false },
+          { label: topTwoCategories[1], data: category2Data, borderColor: '#00BFFF', tension: 0.4, fill: false }
         ]
       });
 
+      setRadarData({
+        labels,
+        datasets: [{
+          label: 'Spending Distribution',
+          data,
+          backgroundColor: 'rgba(138, 43, 226, 0.2)',
+          borderColor: '#8A2BE2',
+          pointBackgroundColor: '#8A2BE2',
+        }]
+      });
+
       setLoading(false);
+      // Trigger fade-in after data is loaded
+      setTimeout(() => setIsVisible(true), 100);
     };
 
     processData();
-  }, [timeRange]);
+  }, []);
+
+  const animationOptions = {
+    animation: {
+      duration: 5000
+    }
+  };
+
+  const chartOptions = { ...animationOptions, plugins: { legend: { labels: { color: 'white', font: { size: 14 } } } }, scales: { x: { type: 'time', time: { unit: 'month' }, ticks: { color: 'white', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.1)' } }, y: { ticks: { color: 'white', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.1)' } } } };
+  const radarOptions = { ...animationOptions, plugins: { legend: { labels: { color: 'white', font: { size: 14 } } } }, scales: { r: { angleLines: { color: 'rgba(255,255,255,0.2)' }, grid: { color: 'rgba(255,255,255,0.2)' }, pointLabels: { color: 'white', font: { size: 14 } }, ticks: { backdropColor: 'transparent', color: 'white' } } } };
+  const doughnutOptions = { ...animationOptions, plugins: { legend: { position: 'right', labels: { color: 'white', font: { size: 14 } } } } };
 
   return (
-    <div className="glass-panel">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2>Spending Breakdown</h2>
-        <div>
-          <button onClick={() => setTimeRange('weekly')}>Weekly</button>
-          <button onClick={() => setTimeRange('monthly')}>Monthly</button>
-          <button onClick={() => setTimeRange('all')}>All Time</button>
-        </div>
-      </div>
+    <div className={`glass-panel metric-card-${isVisible ? 'visible' : 'hidden'}`}>
+      <h2>Spending Analysis</h2>
       {loading ? <p>Loading spending data...</p> : (
-        <div style={{ display: 'flex', gap: '32px', marginTop: '16px' }}>
-          <div style={{ flex: 1 }}>
-            <h3>By Category</h3>
-            {doughnutData ? <Doughnut data={doughnutData} /> : <p>No spending data.</p>}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', marginTop: '16px' }}>
+          <div style={{ gridColumn: '1 / 2' }}>
+            <h3>Breakdown</h3>
+            <p style={{color: 'rgba(255,255,255,0.7)', marginTop: '-8px', fontSize: '0.9rem'}}>Total Spending Distribution</p>
+            {doughnutData ? <Doughnut data={doughnutData} options={doughnutOptions} /> : <p>No data.</p>}
           </div>
-          <div style={{ flex: 2 }}>
+          <div style={{ gridColumn: '2 / 3' }}>
+            <h3>Spending Shape</h3>
+            <p style={{color: 'rgba(255,255,255,0.7)', marginTop: '-8px', fontSize: '0.9rem'}}>Across All Categories</p>
+            {radarData ? <Radar data={radarData} options={radarOptions} /> : <p>No data.</p>}
+          </div>
+          <div style={{ gridColumn: '1 / -1', marginTop: '32px' }}>
             <h3>Top 2 Categories Over Time</h3>
-            {lineData ? <Line data={lineData} options={{ scales: { x: { type: 'time', time: { unit: 'month' } } } }} /> : <p>No trend data.</p>}
+            {lineData ? <Line data={lineData} options={chartOptions} /> : <p>No trend data.</p>}
           </div>
         </div>
       )}

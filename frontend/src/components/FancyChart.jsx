@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -27,40 +27,22 @@ ChartJS.register(
 );
 
 const FancyChart = ({ historical, predictions }) => {
-  const [timeRange, setTimeRange] = useState('all'); // 'weekly', 'monthly', 'all'
-
-  const filterData = (data, range) => {
-    if (range === 'all') return data;
-    const now = new Date();
-    const rangeStart = new Date();
-    if (range === 'weekly') {
-      rangeStart.setDate(now.getDate() - 7);
-    } else if (range === 'monthly') {
-      rangeStart.setMonth(now.getMonth() - 1);
-    }
-    return data.filter(d => new Date(d.Date) >= rangeStart);
-  };
-
-  const filteredHistorical = filterData(historical, timeRange);
-
   const labels = [
-    ...filteredHistorical.map(d => d.Date),
+    ...historical.map(d => d.Date),
     ...predictions.map(d => d.Date)
   ];
 
   const historicalBalances = [
-    ...filteredHistorical.map(d => d.Balance),
+    ...historical.map(d => d.Balance),
     ...predictions.map(() => null)
   ];
 
-  const lastHistoricalBalance = filteredHistorical.length > 0 ? filteredHistorical[filteredHistorical.length - 1].Balance : 0;
+  const lastHistoricalBalance = historical.length > 0 ? historical[historical.length - 1].Balance : 0;
   
   const predictedBalances = [
-    ...filteredHistorical.map((_, i) => i === filteredHistorical.length - 1 ? lastHistoricalBalance : null),
+    ...historical.map((_, i) => i === historical.length - 1 ? lastHistoricalBalance : null),
     ...predictions.map(d => d.Predicted_Balance)
   ];
-
-  const pointColors = predictedBalances.map((val) => val < 1000 ? 'rgba(255, 77, 77, 1)' : 'rgba(100, 255, 218, 1)');
 
   const data = {
     labels,
@@ -68,16 +50,23 @@ const FancyChart = ({ historical, predictions }) => {
       {
         label: 'Actual Balance',
         data: historicalBalances,
-        borderColor: 'rgba(255, 255, 255, 0.8)',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        borderColor: '#8A2BE2', // BlueViolet
+        backgroundColor: (context) => {
+          const ctx = context.chart.ctx;
+          const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+          gradient.addColorStop(0, 'rgba(138, 43, 226, 0.5)');
+          gradient.addColorStop(1, 'rgba(138, 43, 226, 0)');
+          return gradient;
+        },
         fill: true,
+        tension: 0.4, // Increased tension for smoother lines
       },
       {
         label: 'Predicted Balance',
         data: predictedBalances,
-        borderColor: 'rgba(100, 255, 218, 0.8)',
+        borderColor: '#00BFFF', // DeepSkyBlue
         borderDash: [5, 5],
-        pointBackgroundColor: pointColors,
+        tension: 0.4, // Increased tension for smoother lines
       }
     ],
   };
@@ -85,23 +74,38 @@ const FancyChart = ({ historical, predictions }) => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: { legend: { labels: { color: 'white' } } },
+    animation: {
+      duration: 4000 // 4-second animation
+    },
+    plugins: { 
+      legend: { 
+        labels: { 
+          color: 'white', 
+          font: { size: 14 } 
+        } 
+      } 
+    },
     scales: {
-      x: { ticks: { color: 'rgba(255,255,255,0.6)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-      y: { ticks: { color: 'rgba(255,255,255,0.6)' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      x: { 
+        ticks: { 
+          color: 'rgba(255,255,255,0.8)', 
+          font: { size: 12 } 
+        }, 
+        grid: { color: 'rgba(255,255,255,0.1)' } 
+      },
+      y: { 
+        ticks: { 
+          color: 'rgba(255,255,255,0.8)', 
+          font: { size: 12 } 
+        }, 
+        grid: { color: 'rgba(255,255,255,0.1)' } 
+      }
     }
   };
 
   return (
-    <div>
-      <div style={{ marginBottom: '16px' }}>
-        <button onClick={() => setTimeRange('weekly')}>Weekly</button>
-        <button onClick={() => setTimeRange('monthly')}>Monthly</button>
-        <button onClick={() => setTimeRange('all')}>All Time</button>
-      </div>
-      <div style={{ height: '350px' }}>
-        <Line options={options} data={data} />
-      </div>
+    <div style={{ height: '400px' }}>
+      <Line options={options} data={data} />
     </div>
   );
 };

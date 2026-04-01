@@ -57,8 +57,8 @@ const Dashboard = () => {
           <div className="metrics-grid">
             <MetricsPanel historical={historicalData} predictions={predictionData} />
           </div>
-          <AIInsightsPanel />
-          {/* ModelPerformancePanel is now here */}
+          {/* Pass the insights data to the component */}
+          <AIInsightsPanel insights={predictionData?.insights || []} />
           <ModelPerformancePanel />
         </div>
       </div>
