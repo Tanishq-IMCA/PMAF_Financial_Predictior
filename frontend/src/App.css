@@ -5,8 +5,9 @@
 }
 
 .content-container {
-  margin-left: 250px; /* Same as nav width */
+  /* Recalculated margin: nav-left-offset (32px) + nav-width (80px) + desired-gap (32px) = 144px */
+  margin-left: 144px;
   padding: 32px;
-  width: calc(100% - 250px);
+  width: calc(100% - 144px); /* Adjust content width accordingly */
   box-sizing: border-box;
 }
