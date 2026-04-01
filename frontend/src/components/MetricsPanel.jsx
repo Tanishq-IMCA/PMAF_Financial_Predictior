@@ -8,7 +8,8 @@ const MetricCard = ({ title, value, unit, change, changeType }) => {
       <h3 style={{ margin: 0, color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.9rem', fontWeight: 400 }}>
         {title}
       </h3>
-      <p style={{ margin: '8px 0', fontSize: '2rem', fontWeight: 600 }}>
+      {/* Adjusted margin-bottom to remove extra space */}
+      <p style={{ margin: '8px 0 4px 0', fontSize: '2rem', fontWeight: 600 }}> 
         {unit}{value}
       </p>
       {change && (
@@ -25,7 +26,7 @@ const MetricsPanel = ({ historical, predictions }) => {
   const zeroBalanceDate = predictions?.day_of_reckoning || 'N/A';
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}> {/* Changed to flex column layout */}
       <MetricCard 
         title="Current Balance"
         value={lastBalance}

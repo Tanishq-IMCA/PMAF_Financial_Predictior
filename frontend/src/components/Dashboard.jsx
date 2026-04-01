@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import FancyChart from './FancyChart';
 import PredictionsPanel from './PredictionsPanel';
-import Header from './Header'; // Import the new Header component
-import MetricsPanel from './MetricsPanel'; // Import the new MetricsPanel component
+import Header from './Header';
+import MetricsPanel from './MetricsPanel';
+import ModelPerformancePanel from './ModelPerformancePanel';
+import AIInsightsPanel from './AIInsightsPanel';
 import { fetchHistoricalData, fetchPredictions } from '../utils/api';
 
 const Dashboard = () => {
@@ -32,21 +34,32 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Header /> {/* Place the Header at the top */}
+      <Header />
       <div className="dashboard-container">
-        <div className="glass-panel chart-container">
-          <h2>Balance Forecast</h2>
-          <FancyChart historical={historicalData} predictions={predictionData?.predictions || []} />
+        {/* Main content area for the graph and the full-width panel below it */}
+        <div className="main-content">
+          <div className="glass-panel chart-wrapper">
+            <div className="chart-container">
+              <h2>Balance Forecast</h2>
+              <FancyChart historical={historicalData} predictions={predictionData?.predictions || []} />
+            </div>
+          </div>
+          <div className="bottom-panels">
+            {/* PredictionsPanel now takes the full width */}
+            <div className="glass-panel predictions-panel">
+              <PredictionsPanel data={predictionData} />
+            </div>
+          </div>
         </div>
         
-        {/* New Metrics Panel */}
-        <div className="metrics-grid"> {/* This will be a grid for metrics */}
-          <MetricsPanel historical={historicalData} predictions={predictionData} />
-        </div>
-
-        {/* Existing Predictions Panel */}
-        <div className="glass-panel predictions-panel">
-          <PredictionsPanel data={predictionData} />
+        {/* Right column for metrics and other panels */}
+        <div className="right-column-panels">
+          <div className="metrics-grid">
+            <MetricsPanel historical={historicalData} predictions={predictionData} />
+          </div>
+          <AIInsightsPanel />
+          {/* ModelPerformancePanel is now here */}
+          <ModelPerformancePanel />
         </div>
       </div>
     </div>

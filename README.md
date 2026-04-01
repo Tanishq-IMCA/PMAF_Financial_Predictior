@@ -74,6 +74,9 @@ The Axiom dashboard provides a comprehensive and interactive overview of your fi
 ### Predictions Panel
 -   **AI Insights**: Text-based predictions and warnings, such as projected overspending in categories or seasonal expense spikes.
 
+### Model Performance Panel
+-   **Model Comparison Table**: Displays RMSE and R² scores for multiple trained models (Random Forest, Linear Regression, Gradient Boosting), highlighting the best-performing model.
+
 ### Navigation Bar
 -   **Floating Glass Capsule**: A minimalist, icon-only navigation bar on the left side of the screen, styled with a glassmorphism effect.
 -   **Pages**: Easily navigate between the Dashboard, Reports, and Settings.
@@ -88,21 +91,21 @@ The Axiom dashboard provides a comprehensive and interactive overview of your fi
 This project is continuously evolving. Here is the current status and planned next steps:
 
 ### Backend Enhancements
-- [ ] Implement and train additional machine learning models (e.g., Linear Regression, Gradient Boosting) in `backend/scripts/train_model.py`.
-- [ ] Calculate and compare Root Mean Squared Error (RMSE) and R-squared (R²) for all trained models.
-- [ ] Dynamically select the best-performing model for generating dashboard predictions.
-- [ ] Create a new API endpoint (`/api/model_performance`) in `backend/app.py` to expose model comparison metrics.
+- [x] Implement and train additional machine learning models (e.g., Linear Regression, Gradient Boosting) in `backend/scripts/train_model.py`.
+- [x] Calculate and compare Root Mean Squared Error (RMSE) and R-squared (R²) for all trained models.
+- [x] Dynamically select the best-performing model for generating dashboard predictions.
+- [x] Create a new API endpoint (`/api/model_performance`) in `backend/app.py` to expose model comparison metrics.
 
 ### Frontend Enhancements
 - [x] **Multi-Page Structure & Navigation**: Implemented `react-router-dom` for multi-page navigation with a floating, icon-only capsule navigation bar.
 - [x] **Custom Font Integration**: Applied `Bourgeois-Book.otf` globally across the application.
 - [x] **Professional Terminology**: Changed "Day of Reckoning" to "Zero Balance Date".
 - [x] **Project Name Update**: Changed the project name to "The Axiom".
-- [ ] Develop a new React component (`ModelPerformancePanel.jsx`) to display a clean, interactive table of all trained models' performance metrics (RMSE, R²), highlighting the best model.
-- [ ] Create a `SpendingBreakdown.jsx` component featuring an interactive donut chart to visualize spending percentages per category.
+- [x] **Model Performance Panel**: Developed a new React component (`ModelPerformancePanel.jsx`) to display a clean, interactive table of all trained models' performance metrics (RMSE, R²), highlighting the best model.
+- [x] **Dashboard Layout**: Seamlessly integrated all new panels and charts into a refined `Dashboard.jsx` layout.
+- [ ] Create a `SpendingBreakdown.jsx` component on the **Reports page** featuring an interactive donut chart to visualize spending percentages per category.
 - [ ] Implement a smaller multi-line chart within `SpendingBreakdown.jsx` to compare spending trends between the top two expense categories.
 - [ ] Integrate a concise bar chart into `MetricsPanel.jsx` to show "Yesterday's Spend," "Today's Spend," and "Tomorrow's Predicted Spend".
-- [ ] Seamlessly integrate all new panels and charts into the `Dashboard.jsx` layout.
 
 ---
 
