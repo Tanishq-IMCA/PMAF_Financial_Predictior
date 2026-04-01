@@ -1,0 +1,23 @@
+# IDE config
+.idea/
+
+# Local reference files (contains secrets)
+reference dir/
+
+# Python
+__pycache__/
+*.pyc
+
+# Backend generated files
+backend/data/
+backend/models/
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.pnp
+frontend/.pnp.js
+frontend/coverage/
+
+# Misc
+.DS_Store

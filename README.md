@@ -58,5 +58,3 @@ npm install
 npm start
 ```
 *(The application will automatically open in your browser at `http://localhost:3000`)*
-
-</3

@@ -4,6 +4,7 @@ import pandas as pd
 import os
 import pickle
 from datetime import timedelta
+import numpy as np
 
 app = Flask(__name__)
 CORS(app) # Allow React frontend to access
@@ -50,7 +51,7 @@ def get_predictions():
         predictions.append({
             'Date': current_date.strftime("%Y-%m-%d"),
             'Predicted_Balance': round(current_balance, 2),
-            'Danger_Zone': current_balance < 1000 # Flag for UI to turn red
+            'Danger_Zone': int(current_balance < 1000) # Convert boolean to 1 or 0
         })
         
         if current_balance <= 0:
