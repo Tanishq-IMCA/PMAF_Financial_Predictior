@@ -45,67 +45,40 @@
 
 The Axiom is a sophisticated financial prediction software designed to provide users with insightful forecasts into their spending habits and account balance trajectories. It leverages machine learning to analyze historical financial data and predict future trends, all presented through a modern, intuitive glassmorphism user interface.
 
-The project is structured into three core modules:
-
-1.  **Realistic Data Generation**: A Python module (`data_generator.py`) that creates highly realistic financial transaction data, mimicking human spending patterns, including multi-transaction days, skipped days, recurring costs, and seasonal spikes. This generates both training data for the ML model and historical data for the dashboard.
-2.  **Machine Learning Model Training**: Utilizes a Python module (`train_model.py`) to train a Random Forest Regressor on the generated data. The model learns to identify patterns in spending based on categories, time, and current balance to predict future transaction amounts.
-3.  **Predictive Analytics & API**: A Flask API (`app.py`) serves the historical and predicted data to the frontend. It calculates key metrics like the "Zero Balance Date" and provides AI-driven insights into spending behavior.
-
-The frontend, built with React, features a sleek glassmorphism design, a custom font, and a multi-page layout with a floating, icon-only navigation bar for a premium user experience.
-
 ---
 
-## Dashboard Features
+## Features
 
-The Axiom dashboard provides a comprehensive and interactive overview of your financial health.
+### Dashboard
+-   **Interactive Balance Forecast**: A line graph showing historical and predicted balance with weekly/monthly filters.
+-   **"Danger Zone" Transition**: The predictive line dynamically changes color to red as the projected balance approaches zero.
+-   **Metrics Panel**: Displays current balance, projected zero balance date, monthly spend, and average transaction amount.
+-   **AI Insights & Predictions**: Text-based warnings and AI-driven insights into spending behavior.
+-   **Model Performance**: A comparison table of different ML models (RMSE, R²).
 
-### Main Balance Forecast Chart
--   **Interactive Line Graph**: Displays your account balance over time.
--   **Historical Data**: Shown as a solid line, reflecting actual past spending.
--   **Predictive Data**: Extends into the future as a dotted line, forecasting your balance.
--   **"Danger Zone" Transition**: The predictive line dynamically changes color, transitioning to red as your projected balance approaches zero, providing an early warning.
-
-### Metrics Panel
--   **Current Balance**: Your real-time account balance.
--   **Zero Balance Date**: The predicted date your account balance will hit $0 based on current spending velocity.
--   **Monthly Spend**: An overview of your spending for the current month (mock data for now).
--   **Avg. Transaction**: Your average transaction amount (mock data for now).
-
-### Predictions Panel
--   **AI Insights**: Text-based predictions and warnings, such as projected overspending in categories or seasonal expense spikes.
-
-### Model Performance Panel
--   **Model Comparison Table**: Displays RMSE and R² scores for multiple trained models (Random Forest, Linear Regression, Gradient Boosting), highlighting the best-performing model.
-
-### Navigation Bar
--   **Floating Glass Capsule**: A minimalist, icon-only navigation bar on the left side of the screen, styled with a glassmorphism effect.
--   **Pages**: Easily navigate between the Dashboard, Reports, and Settings.
-
-### Reports & Settings Pages
--   Currently display a professional "Under Construction" message, ready for future expansion.
+### Reports Page
+-   **Spending Breakdown**: A detailed analysis of spending habits.
+-   **Donut Chart**: Visualizes spending percentages by category.
+-   **Top 2 Category Comparison**: A multi-line chart comparing spending trends of the top two expense categories over time.
+-   **Time-based Filtering**: Both the Dashboard and Reports pages feature weekly and monthly data filters.
 
 ---
 
 ## Project Roadmap
 
-This project is continuously evolving. Here is the current status and planned next steps:
+### Core Features
+- [x] **Backend API**: Flask API to serve historical data, predictions, and model metrics.
+- [x] **Machine Learning Pipeline**: Scripts to generate realistic data and train multiple regression models.
+- [x] **Dynamic Model Selection**: Automatically uses the best-performing model for predictions.
+- [x] **Multi-Page Frontend**: React application with a floating navigation bar.
+- [x] **Dashboard Layout**: A refined, responsive layout for all primary data panels.
+- [x] **Spending Breakdown Reports**: A dedicated page for detailed spending analysis with multiple charts.
+- [x] **Time-based Filtering**: Implemented weekly and monthly filters for all relevant charts.
 
-### Backend Enhancements
-- [x] Implement and train additional machine learning models (e.g., Linear Regression, Gradient Boosting) in `backend/scripts/train_model.py`.
-- [x] Calculate and compare Root Mean Squared Error (RMSE) and R-squared (R²) for all trained models.
-- [x] Dynamically select the best-performing model for generating dashboard predictions.
-- [x] Create a new API endpoint (`/api/model_performance`) in `backend/app.py` to expose model comparison metrics.
-
-### Frontend Enhancements
-- [x] **Multi-Page Structure & Navigation**: Implemented `react-router-dom` for multi-page navigation with a floating, icon-only capsule navigation bar.
-- [x] **Custom Font Integration**: Applied `Bourgeois-Book.otf` globally across the application.
-- [x] **Professional Terminology**: Changed "Day of Reckoning" to "Zero Balance Date".
-- [x] **Project Name Update**: Changed the project name to "The Axiom".
-- [x] **Model Performance Panel**: Developed a new React component (`ModelPerformancePanel.jsx`) to display a clean, interactive table of all trained models' performance metrics (RMSE, R²), highlighting the best model.
-- [x] **Dashboard Layout**: Seamlessly integrated all new panels and charts into a refined `Dashboard.jsx` layout.
-- [ ] Create a `SpendingBreakdown.jsx` component on the **Reports page** featuring an interactive donut chart to visualize spending percentages per category.
-- [ ] Implement a smaller multi-line chart within `SpendingBreakdown.jsx` to compare spending trends between the top two expense categories.
+### Future Enhancements
 - [ ] Integrate a concise bar chart into `MetricsPanel.jsx` to show "Yesterday's Spend," "Today's Spend," and "Tomorrow's Predicted Spend".
+- [ ] Add user authentication and the ability to upload personal financial data.
+- [ ] Enhance the "AI Insights" to be dynamically generated based on user data.
 
 ---
 
@@ -116,40 +89,20 @@ This project is continuously evolving. Here is the current status and planned ne
 -   Node.js and npm
 
 ### 1. Backend Setup
-
-Open a terminal and navigate to the `backend` directory:
-
 ```bash
 cd backend
-
-# Install Python dependencies
 py -m pip install -r requirements.txt
-
-# Generate the realistic data CSVs
 py scripts/data_generator.py
-
-# Train the Random Forest model
 py scripts/train_model.py
-
-# Start the Flask API server
 py app.py
 ```
-*(The server will run on `http://0.0.0.0:5000`)*
 
 ### 2. Frontend Setup
-
-Open a new, separate terminal and navigate to the `frontend` directory:
-
 ```bash
 cd frontend
-
-# Install Node dependencies (this will take a moment)
 npm install
-
-# Start the React development server
 npm start
 ```
-*(The application will automatically open in your browser at `http://localhost:3000`)*
 
 ---
 

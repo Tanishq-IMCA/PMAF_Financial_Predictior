@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,9 +8,11 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  TimeScale
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import 'chartjs-adapter-date-fns';
 
 ChartJS.register(
   CategoryScale,
@@ -20,37 +22,45 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  TimeScale
 );
 
 const FancyChart = ({ historical, predictions }) => {
-  // Extracting data for the chart
-  // Simplify by grouping by day if needed, or just taking the last X entries for visibility
-  const recentHistory = historical.slice(-50); // Just show recent history for clarity
+  const [timeRange, setTimeRange] = useState('all'); // 'weekly', 'monthly', 'all'
+
+  const filterData = (data, range) => {
+    if (range === 'all') return data;
+    const now = new Date();
+    const rangeStart = new Date();
+    if (range === 'weekly') {
+      rangeStart.setDate(now.getDate() - 7);
+    } else if (range === 'monthly') {
+      rangeStart.setMonth(now.getMonth() - 1);
+    }
+    return data.filter(d => new Date(d.Date) >= rangeStart);
+  };
+
+  const filteredHistorical = filterData(historical, timeRange);
 
   const labels = [
-    ...recentHistory.map(d => d.Date),
+    ...filteredHistorical.map(d => d.Date),
     ...predictions.map(d => d.Date)
   ];
 
   const historicalBalances = [
-    ...recentHistory.map(d => d.Balance),
-    ...predictions.map(() => null) // Pad with nulls for prediction period
+    ...filteredHistorical.map(d => d.Balance),
+    ...predictions.map(() => null)
   ];
 
-  // The prediction line starts from the last historical point
-  const lastHistoricalBalance = recentHistory.length > 0 ? recentHistory[recentHistory.length - 1].Balance : 0;
+  const lastHistoricalBalance = filteredHistorical.length > 0 ? filteredHistorical[filteredHistorical.length - 1].Balance : 0;
   
   const predictedBalances = [
-    ...recentHistory.map((_, i) => i === recentHistory.length - 1 ? lastHistoricalBalance : null),
+    ...filteredHistorical.map((_, i) => i === filteredHistorical.length - 1 ? lastHistoricalBalance : null),
     ...predictions.map(d => d.Predicted_Balance)
   ];
 
-  // Dynamic coloring for prediction line based on "Danger Zone"
-  const pointColors = predictedBalances.map((val, index) => {
-      if (val === null) return 'rgba(0,0,0,0)';
-      return val < 1000 ? 'rgba(255, 77, 77, 1)' : 'rgba(100, 255, 218, 1)'; // Red if danger, else teal
-  });
+  const pointColors = predictedBalances.map((val) => val < 1000 ? 'rgba(255, 77, 77, 1)' : 'rgba(100, 255, 218, 1)');
 
   const data = {
     labels,
@@ -60,33 +70,14 @@ const FancyChart = ({ historical, predictions }) => {
         data: historicalBalances,
         borderColor: 'rgba(255, 255, 255, 0.8)',
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        borderWidth: 2,
-        tension: 0.3, // Smooth curve
         fill: true,
-        pointRadius: 0,
-        pointHitRadius: 10,
       },
       {
         label: 'Predicted Balance',
         data: predictedBalances,
-        borderColor: 'rgba(100, 255, 218, 0.8)', // Base color
-        borderWidth: 2,
-        borderDash: [5, 5], // Dotted line
-        tension: 0.3,
+        borderColor: 'rgba(100, 255, 218, 0.8)',
+        borderDash: [5, 5],
         pointBackgroundColor: pointColors,
-        pointBorderColor: pointColors,
-        pointRadius: 2,
-        segment: {
-            borderColor: ctx => {
-                // If the end point of the segment is in danger zone, color segment red
-                const index = ctx.p1DataIndex;
-                const val = predictedBalances[index];
-                if (val !== null && val < 1000) {
-                    return 'rgba(255, 77, 77, 0.8)'; // Transition to red
-                }
-                return 'rgba(100, 255, 218, 0.8)';
-            }
-        }
       }
     ],
   };
@@ -94,28 +85,25 @@ const FancyChart = ({ historical, predictions }) => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        labels: { color: 'white' }
-      },
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-      }
-    },
+    plugins: { legend: { labels: { color: 'white' } } },
     scales: {
-      x: {
-        ticks: { color: 'rgba(255,255,255,0.6)', maxTicksLimit: 10 },
-        grid: { color: 'rgba(255,255,255,0.05)' }
-      },
-      y: {
-        ticks: { color: 'rgba(255,255,255,0.6)' },
-        grid: { color: 'rgba(255,255,255,0.05)' }
-      }
+      x: { ticks: { color: 'rgba(255,255,255,0.6)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: 'rgba(255,255,255,0.6)' }, grid: { color: 'rgba(255,255,255,0.05)' } }
     }
   };
 
-  return <Line options={options} data={data} />;
+  return (
+    <div>
+      <div style={{ marginBottom: '16px' }}>
+        <button onClick={() => setTimeRange('weekly')}>Weekly</button>
+        <button onClick={() => setTimeRange('monthly')}>Monthly</button>
+        <button onClick={() => setTimeRange('all')}>All Time</button>
+      </div>
+      <div style={{ height: '350px' }}>
+        <Line options={options} data={data} />
+      </div>
+    </div>
+  );
 };
 
 export default FancyChart;
