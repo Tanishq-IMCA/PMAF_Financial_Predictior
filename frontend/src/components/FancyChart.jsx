@@ -60,13 +60,17 @@ const FancyChart = ({ historical, predictions }) => {
         },
         fill: true,
         tension: 0.4, // Increased tension for smoother lines
+        pointRadius: 0, // Remove points for historical line to make it cleaner
+        pointHitRadius: 10,
       },
       {
         label: 'Predicted Balance',
         data: predictedBalances,
         borderColor: '#00BFFF', // DeepSkyBlue
-        borderDash: [5, 5],
+        borderDash: [2, 4], // Finer dotted line (dash length 2, gap 4)
         tension: 0.4, // Increased tension for smoother lines
+        pointRadius: 1, // Make points very small
+        pointBackgroundColor: '#00BFFF',
       }
     ],
   };
@@ -83,7 +87,16 @@ const FancyChart = ({ historical, predictions }) => {
           color: 'white', 
           font: { size: 14 } 
         } 
-      } 
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+      }
+    },
+    interaction: {
+      mode: 'nearest',
+      axis: 'x',
+      intersect: false
     },
     scales: {
       x: { 

@@ -69,8 +69,8 @@ const SpendingBreakdown = () => {
 
       setLineData({
         datasets: [
-          { label: topTwoCategories[0], data: category1Data, borderColor: '#8A2BE2', tension: 0.4, fill: false },
-          { label: topTwoCategories[1], data: category2Data, borderColor: '#00BFFF', tension: 0.4, fill: false }
+          { label: topTwoCategories[0], data: category1Data, borderColor: '#8A2BE2', tension: 0.4, fill: false, pointRadius: 2, pointHoverRadius: 5 },
+          { label: topTwoCategories[1], data: category2Data, borderColor: '#00BFFF', tension: 0.4, fill: false, pointRadius: 2, pointHoverRadius: 5 }
         ]
       });
 
@@ -82,6 +82,8 @@ const SpendingBreakdown = () => {
           backgroundColor: 'rgba(138, 43, 226, 0.2)',
           borderColor: '#8A2BE2',
           pointBackgroundColor: '#8A2BE2',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: '#8A2BE2'
         }]
       });
 
@@ -99,9 +101,56 @@ const SpendingBreakdown = () => {
     }
   };
 
-  const chartOptions = { ...animationOptions, plugins: { legend: { labels: { color: 'white', font: { size: 14 } } } }, scales: { x: { type: 'time', time: { unit: 'month' }, ticks: { color: 'white', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.1)' } }, y: { ticks: { color: 'white', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.1)' } } } };
-  const radarOptions = { ...animationOptions, plugins: { legend: { labels: { color: 'white', font: { size: 14 } } } }, scales: { r: { angleLines: { color: 'rgba(255,255,255,0.2)' }, grid: { color: 'rgba(255,255,255,0.2)' }, pointLabels: { color: 'white', font: { size: 14 } }, ticks: { backdropColor: 'transparent', color: 'white' } } } };
-  const doughnutOptions = { ...animationOptions, plugins: { legend: { position: 'right', labels: { color: 'white', font: { size: 14 } } } } };
+  const commonInteraction = {
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    plugins: {
+      tooltip: {
+        enabled: true,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleFont: { size: 14 },
+        bodyFont: { size: 14 },
+        padding: 12,
+        cornerRadius: 8,
+      },
+      legend: { labels: { color: 'white', font: { size: 14 } } }
+    }
+  };
+
+  const chartOptions = { 
+    ...animationOptions, 
+    ...commonInteraction,
+    scales: { 
+      x: { type: 'time', time: { unit: 'month' }, ticks: { color: 'white', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.1)' } }, 
+      y: { ticks: { color: 'white', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.1)' } } 
+    } 
+  };
+  
+  const radarOptions = { 
+    ...animationOptions, 
+    ...commonInteraction,
+    interaction: { // Override mode for radar
+      mode: 'point'
+    },
+    scales: { 
+      r: { 
+        angleLines: { color: 'rgba(255,255,255,0.2)' }, 
+        grid: { color: 'rgba(255,255,255,0.2)' }, 
+        pointLabels: { color: 'white', font: { size: 14 } }, 
+        ticks: { backdropColor: 'transparent', color: 'white' } 
+      } 
+    } 
+  };
+  
+  const doughnutOptions = { 
+    ...animationOptions, 
+    plugins: { 
+      ...commonInteraction.plugins,
+      legend: { position: 'right', labels: { color: 'white', font: { size: 14 } } } 
+    } 
+  };
 
   return (
     <div className={`glass-panel metric-card-${isVisible ? 'visible' : 'hidden'}`}>

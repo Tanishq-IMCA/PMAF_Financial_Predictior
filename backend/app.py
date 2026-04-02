@@ -44,7 +44,7 @@ def get_predictions():
 
     predictions = []
 
-    for _ in range(30):  # Predict for the next 30 days
+    for _ in range(180):  # Predict for the next 180 days (approx 6 months)
         last_date += timedelta(days=1)
 
         # 1. Guarantee the Sawtooth: Manual Salary Injection
@@ -63,16 +63,12 @@ def get_predictions():
         features_df = pd.DataFrame([feature_dict], columns=TRAINING_COLUMNS)
         predicted_amount = model.predict(features_df)[0]
         
-        # 3. Apply Prediction Safely (The True Fix)
+        # 3. Apply Prediction Safely
         if predicted_amount < 0:
-            # The model predicts individual transactions. If it predicts a massive one (like Rent),
-            # applying it every single day causes a nosedive. We clamp it to a realistic daily maximum (~$200).
             expense = max(predicted_amount, -200) 
-            # Add some natural variance so the line isn't perfectly straight
             expense += np.random.uniform(-50, 50)
             current_balance += expense
         else:
-            # Model predicted income, but we handle salary manually. Simulate standard daily expense.
             current_balance -= np.random.uniform(50, 200)
 
         predictions.append({
